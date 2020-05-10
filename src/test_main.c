@@ -1,12 +1,13 @@
-#include "jpeg_encode_decode.h"
-#include <stdio.h>
 #include <assert.h>
+#include <stdio.h>
 
-int main(int argc, char *argv[]) {
+#include "jpeg_encode_decode.h"
+
+int main(int argc, char* argv[]) {
     assert(argc == 2 && "Missing file path as argument");
     printf("Opening file '%s'\n", argv[1]);
 
-    char *error_str = NULL;
+    char* error_str = NULL;
     int rc = jpeg_decode_from_path(argv[1], &error_str);
 
     printf("Ret code: %d\n", rc);
