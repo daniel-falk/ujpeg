@@ -16,7 +16,9 @@
  *
  * TODO: Use fd_src instead of reading everything into memory
  */
-int jpeg_decode_from_path(char* path, struct raw_image* image, char** error) {
+int jpeg_decode_from_path(const char* path,
+                          struct raw_image* image,
+                          char** error) {
     struct stat file_info;
 
     int rc = stat(path, &file_info);
@@ -41,7 +43,7 @@ int jpeg_decode_from_path(char* path, struct raw_image* image, char** error) {
         return errno;
     }
 
-    int i = 0;
+    size_t i = 0;
     // TODO: Risk for loop-for-ever if some error...
     while (i < jpeg_buffer.len) {
         rc = read(fd, jpeg_buffer.start + i, jpeg_buffer.len - i);
@@ -132,4 +134,11 @@ int jpeg_decode_from_buffer(struct mem_buffer jpeg_buffer,
     jpeg_destroy_decompress(&cinfo);
 
     return 0;
+}
+
+void jpeg_free_raw_image(struct raw_image image) {
+    if (image.buffer.start) {
+        free(image.buffer.start);
+    }
+    image.buffer.len = 0;
 }

@@ -1,20 +1,33 @@
 # ujpeg
-Jpeg decoder library for micropython
+Jpeg encoder/decoder library for micropython
 
-! __Under construction__ !
+Currently only decoding is implemented. 
+
+```python
+import ujpeg
+
+ujpeg.decode_file("test.jpg", "test.pgm")
+```
 
 Idea is to have a simple micropython library to
 - encode jpeg images from raw bytes
 - decode jpeg images from raw bytes
 - decode jpeg image from file
 
-Currently the jpeg decode code is working but micropython bindings are missing.
+# How to use
+The file structure follows the regular micropython c module workflow, see official instructions for details.
 
-Compile test code with:
+You need to link against libjpeg. If you are using Ubuntu or debian, do
 ```bash
-cd src
-gcc test_main.c jpeg_encode_decode.c -Wall -Werror -ljpeg
+apt-get install libjpeg-dev -y
 ```
+or if cross-compiling, e.g.
+```bash
+apt-get install libjpeg-dev:armhf -y
+```
+
+A project using this specific library can be found here:
+https://github.com/daniel-falk/camera-analytics
 
 # Contribute
 All contributions are welcomed, such as:
@@ -22,6 +35,18 @@ All contributions are welcomed, such as:
 - documentation
 - ideas of API or refactorization
 - feature requests
+
+The c-code test file can be compiled with:
+```bash
+cd src
+gcc test_main.c jpeg_encode_decode.c -Wall -Werror -ljpeg
+./a.out <path_to_file.jpg>
+```
+
+Python test file can be run after building micropython with this module:
+```bash
+./micropython test.py
+```
 
 ## Coding style
 C code should follow the Chromium style but with 4 spaces indent. This can be automatically done using e.g. `clang-format-9`:

@@ -20,10 +20,14 @@ struct raw_image {
                     // channels > 1
 };
 
-int jpeg_decode_from_path(char* path, struct raw_image* image, char** error);
+int jpeg_decode_from_path(const char* path,
+                          struct raw_image* image,
+                          char** error);
 
 int jpeg_decode_from_buffer(struct mem_buffer jpeg_buffer,
                             struct raw_image* image,
                             char** error);
+
+void jpeg_free_raw_image(struct raw_image image);
 
 #endif
