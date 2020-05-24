@@ -1,12 +1,28 @@
 # ujpeg
 Jpeg encoder/decoder library for micropython
 
-Currently only decoding is implemented. 
+Currently only decoding is implemented. Two functions are supported:
+- decode from jpeg file to ndarray (ulab)
+- decode from jpeg file to ppm file
 
+Defaults in ulab (compilation time option) sets the maximum dimension of a ndarray to 2 dimension. Thus to stay compatible with default ulab compilations a color image will be returned as a tuple of three 2D ndarrays, one for each channel:
+```python
+import ujpeg
+from ulab import numpy as np
+
+r, g, b = ujpeg.decode("test.jpg")
+print("Image shape: %dx%d" % r.shape)
+
+idx = np.argmax(list(map(np.mean, [r, g, b])))
+colors = "red green blue".split()
+print("Image is very %s!" % colors[idx])
+```
+
+An image can also be directly decoded to another image file:
 ```python
 import ujpeg
 
-ujpeg.decode_file("test.jpg", "test.pgm")
+ujpeg.decode_to_file("test.jpg", "test.pgm")
 ```
 
 Idea is to have a simple micropython library to
