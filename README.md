@@ -6,7 +6,7 @@ Currently only decoding is implemented.
 ```python
 import ujpeg
 
-ujpeg.decode_file("test.jpg", "test.pgm")
+ujpeg.decode_to_file("test.jpg", "test.pgm")
 ```
 
 Idea is to have a simple micropython library to

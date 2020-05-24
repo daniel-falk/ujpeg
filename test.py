@@ -19,22 +19,31 @@ if __name__ == "__main__":
 
     print("Decode file to pgm...")
     try:
-        ujpeg.decode_file(jpeg_file, "test.pgm")
+        ujpeg.decode_to_file(jpeg_file, "test.pgm")
         print("OK!")
     except Exception:
         print("Failed!")
         raise
 
+    print("Decode file to ndarray...")
+    try:
+        img = ujpeg.decode(jpeg_file)
+        assert img[0].shape() == (1080, 1920)
+        print("OK!")
+    except Exception:
+        print("Failed")
+        raise
+
     print("Try decode non existing file...")
     try:
-        ujpeg.decode_file("/does-not-exist.jpg", "test.pgm")
+        ujpeg.decode_to_file("/does-not-exist.jpg", "test.pgm")
         print("OK!")
     except Exception as e:
         print(type(e), e)
 
     print("Try writing output to invalid path...")
     try:
-        ujpeg.decode_file(jpeg_file, "/")
+        ujpeg.decode_to_file(jpeg_file, "/")
         print("No exception!")
     except Exception as e:
         print(type(e), e)
@@ -46,7 +55,7 @@ if __name__ == "__main__":
     # any error in the decoding..
     print("Try to decode invalid jpeg file...")
     try:
-        ujpeg.decode_file("test.pgm", "test.pgm")
+        ujpeg.decode_to_file("test.pgm", "test.pgm")
         print("No exception!")
     except Exception as e:
         print(type(e), e)
