@@ -114,6 +114,7 @@ STATIC mp_obj_t ujpeg_decode(mp_obj_t input_path_obj) {
         ndarray->array->len = array_length;
         ndarray->array->items = malloc(typecode_size * array_length);
         if (!ndarray->array->items) {
+            jpeg_free_raw_image(image);
             m_malloc_fail(typecode_size * array_length);
         }
 
@@ -121,11 +122,13 @@ STATIC mp_obj_t ujpeg_decode(mp_obj_t input_path_obj) {
         assert(image.width * image.channels == image.stride);
         uint8_t *items = (uint8_t *)ndarray->array->items;
         for (size_t i = 0; i < image.height * image.width; ++i) {
-            items[i] = image.buffer.start[i * image.channels];
+            items[i] = image.buffer.start[i * image.channels + ch];
         }
 
         mp_image[ch] = MP_OBJ_FROM_PTR(ndarray);
     }
+
+    jpeg_free_raw_image(image);
 
     // TODO: Not sure if this does a copy of all arrays or not,
     //       might need create tuple as a pointer and use MP_OBJ_FROM_PTR
